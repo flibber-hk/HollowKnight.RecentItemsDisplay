@@ -46,14 +46,19 @@ namespace RecentItemsDisplay
             ItemChanger.Events.AfterGive += SendItemToDisplay;
         }
 
+
         private void SendItemToDisplay(ItemChanger.ReadOnlyGiveEventArgs obj)
         {
             string item = obj.Item.UIDef.GetPostviewName();
             string scene = obj.Placement.Location.sceneName;
+            string source = AreaName.CleanAreaName(scene);
 
             Sprite sprite = obj.Item.UIDef.GetSprite();
 
-            Display.AddItem(item, scene, sprite);
+            Events.ItemDisplayArgs args = new Events.ItemDisplayArgs(item, source, sprite);
+            Events.ModifyDisplayItemInvoke(obj, args);
+
+            Display.AddItem(args);
         }
 
         public override string GetVersion()

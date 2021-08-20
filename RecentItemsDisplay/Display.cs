@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace RecentItemsDisplay
 {
-    static internal class Display
+    internal static class Display
     {
         private static Queue<GameObject> items = new Queue<GameObject>();
 
@@ -35,15 +35,17 @@ namespace RecentItemsDisplay
             items.Clear();
         }
 
-        public static void AddItem(string item, string scene, Sprite sprite)
+        public static void AddItem(Events.ItemDisplayArgs args)
         {
+            if (args.IgnoreItem) return;
+
+            string msg = args.GetMessage();
+            Sprite sprite = args.DisplaySprite;
+
             if (canvas == null)
             {
                 Create();
             }
-
-            string area = AreaName.CleanAreaName(scene);
-            string msg = string.IsNullOrEmpty(area) ? item : item + "\nfrom " + area;
 
             GameObject basePanel = CanvasUtil.CreateBasePanel(canvas,
                 new CanvasUtil.RectData(new Vector2(200, 50), Vector2.zero,
