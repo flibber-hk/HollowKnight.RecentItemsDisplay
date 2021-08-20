@@ -10,8 +10,6 @@ namespace RecentItemsDisplay
 {
     static internal class Display
     {
-        public static int MaxItems = 5;
-
         private static Queue<GameObject> items = new Queue<GameObject>();
 
         private static GameObject canvas;
@@ -60,7 +58,7 @@ namespace RecentItemsDisplay
                 CanvasUtil.GetFont("Perpetua"));
 
             items.Enqueue(basePanel);
-            if (items.Count > MaxItems)
+            if (items.Count > RecentItems.globalSettings.MaxItems)
             {
                 Object.Destroy(items.Dequeue());
             }
@@ -82,7 +80,7 @@ namespace RecentItemsDisplay
         public static void Show()
         {
             if (canvas == null) return;
-            canvas.SetActive(true);
+            canvas.SetActive(RecentItems.globalSettings.ShowDisplay);
         }
 
         public static void Hide()

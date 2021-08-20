@@ -72,6 +72,7 @@
     <Compile Include="Display.cs" />
     <Compile Include="RecentItems.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\SceneToArea.json" />
