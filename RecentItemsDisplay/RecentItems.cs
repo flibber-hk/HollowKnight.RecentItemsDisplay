@@ -129,9 +129,9 @@ namespace RecentItemsDisplay
                 }
             }
 
-            private void ShowRecentItem(string st, Sprite sp)
+            private void ShowItem(string st, Sprite sp)
             {
-                ShowRecentItem_string_Sprite?.Invoke(null, new object[] { st, sp });
+                ShowItem_string_Sprite?.Invoke(null, new object[] { st, sp });
             }
         */
         #endregion
