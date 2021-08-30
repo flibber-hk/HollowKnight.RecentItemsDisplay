@@ -43,7 +43,6 @@ namespace RecentItemsDisplay
             Display.Hook();
             AreaName.LoadData();
 
-            // Unsafe add
             ItemChanger.Events.AfterGive += SendItemToDisplay;
         }
 
@@ -62,12 +61,13 @@ namespace RecentItemsDisplay
             Display.AddItem(args);
         }
 
+        #region API
         /// <summary>
         /// Manually show an item on the recent items display
         /// </summary>
         /// <param name="args">The ItemDisplayArgs object that represents the item to display</param>
         [PublicAPI]
-        public void SendItemToDisplay(Events.ItemDisplayArgs args)
+        public static void ShowItem(Events.ItemDisplayArgs args)
         {
             Events.ModifyDisplayItemInvoke(null, args);
             Display.AddItem(args);
@@ -79,13 +79,13 @@ namespace RecentItemsDisplay
         /// <param name="message">The text to display</param>
         /// <param name="sprite">The item sprite</param>
         [PublicAPI]
-        public void SendItemToDisplay(string message, Sprite sprite)
+        public static void ShowItem(string message, Sprite sprite)
         {
             Events.ItemDisplayArgs args = new Events.ItemDisplayArgs(string.Empty, string.Empty, sprite)
             {
                 DisplayMessage = message
             };
-            SendItemToDisplay(args);
+            ShowItem(args);
         }
 
         /// <summary>
@@ -95,11 +95,46 @@ namespace RecentItemsDisplay
         /// <param name="source">The source of the item (e.g. area name)</param>
         /// <param name="sprite">The sprite to display</param>
         [PublicAPI]
-        public void SendItemToDisplay(string name, string source, Sprite sprite)
+        public static void ShowItem(string name, string source, Sprite sprite)
         {
             Events.ItemDisplayArgs args = new Events.ItemDisplayArgs(name, source, sprite);
-            SendItemToDisplay(args);
+            ShowItem(args);
         }
+
+        // In order to directly send an item to the display without requiring RecentItems to be installed, we can use a pattern like this.
+        /*
+            private MethodInfo _showItem_string_Sprite;
+            private MethodInfo ShowItem_string_Sprite
+            {
+                get
+                {
+                    try
+                    {
+                        if (ModHooks.GetMod("RecentItems") is Mod _)
+                        {
+                            if (_showItem_string_Sprite == null)
+                            {
+                                _showItem_string_Sprite = Type.GetType("RecentItemsDisplay.RecentItems, RecentItemsDisplay")
+                                .GetMethod("ShowItem", BindingFlags.Public | BindingFlags.Static, null, CallingConventions.Any,
+                                new Type[] { typeof(string), typeof(Sprite) }, null);
+                            }
+                            return _showItem_string_Sprite;
+                       }
+                    }
+                    catch (Exception ex)
+                    {
+                        LogWarn("Error finding Recent Items\n" + ex);
+                    }
+                    return null;
+                }
+            }
+
+            private void ShowRecentItem(string st, Sprite sp)
+            {
+                ShowRecentItem_string_Sprite?.Invoke(null, new object[] { st, sp });
+            }
+        */
+        #endregion
 
         public override string GetVersion()
         {

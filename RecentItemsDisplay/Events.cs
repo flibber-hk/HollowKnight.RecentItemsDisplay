@@ -15,6 +15,8 @@ namespace RecentItemsDisplay
         public static event Action<ReadOnlyGiveEventArgs, ItemDisplayArgs> ModifyDisplayItem;
         internal static void ModifyDisplayItemInvoke(ReadOnlyGiveEventArgs giveArgs, ItemDisplayArgs displayArgs)
         {
+            if (ModifyDisplayItem == null) return;
+
             Delegate[] invocationList = ModifyDisplayItem.GetInvocationList();
 
             foreach (Action<ReadOnlyGiveEventArgs, ItemDisplayArgs> toInvoke in invocationList)
@@ -78,5 +80,23 @@ namespace RecentItemsDisplay
             /// </summary>
             public bool IgnoreItem { get; set; }
         }
+
+        // In order to subscribe to the ModifyDisplayItem event without requiring RecentItems to be installed, we can do so using the following code:
+        /*
+                Type recentItemsEvents = Type.GetType("RecentItemsDisplay.Events, RecentItemsDisplay");
+                if (recentItemsEvents == null) { Log("Did not Hook RID"); return; }
+                recentItemsEvents.GetEvent("ModifyDisplayItem").AddEventHandler(null, (Action<object, object>)Events_ModifyDisplayItem);
+         */
+        // We then define the function Events_ModifyDisplayItem as follows:
+        /*
+                private void Events_ModifyDisplayItem(object arg1, object arg2)
+                {
+                    ItemChanger.ReadOnlyGiveEventArgs giveArgs = arg1 as ItemChanger.ReadOnlyGiveEventArgs;
+                    RecentItemsDisplay.Events.ItemDisplayArgs displayArgs = arg2 as RecentItemsDisplay.Events.ItemDisplayArgs;
+
+                    // Code goes here
+                }
+         */
+        // This procedure requires RecentItemsDisplay to be referenced.
     }
 }
