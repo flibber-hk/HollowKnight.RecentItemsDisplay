@@ -51,9 +51,12 @@ namespace RecentItemsDisplay
                 new CanvasUtil.RectData(new Vector2(200, 50), Vector2.zero,
                 new Vector2(0.9f, 0.9f), new Vector2(0.9f, 0.9f)));
 
-            CanvasUtil.CreateImagePanel(basePanel, sprite,
-                new CanvasUtil.RectData(new Vector2(50, 50), Vector2.zero, new Vector2(0f, 0.5f),
-                    new Vector2(0f, 0.5f)));
+            if (sprite != null)
+            {
+                CanvasUtil.CreateImagePanel(basePanel, sprite,
+                    new CanvasUtil.RectData(new Vector2(50, 50), Vector2.zero, new Vector2(0f, 0.5f),
+                        new Vector2(0f, 0.5f)));
+            }
             CanvasUtil.CreateTextPanel(basePanel, msg, 24, TextAnchor.MiddleLeft,
                 new CanvasUtil.RectData(new Vector2(400, 100), Vector2.zero,
                 new Vector2(1.2f, 0.5f), new Vector2(1.2f, 0.5f)),

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Modding;
 using UnityEngine;
 
@@ -59,6 +60,45 @@ namespace RecentItemsDisplay
             Events.ModifyDisplayItemInvoke(obj, args);
 
             Display.AddItem(args);
+        }
+
+        /// <summary>
+        /// Manually show an item on the recent items display
+        /// </summary>
+        /// <param name="args">The ItemDisplayArgs object that represents the item to display</param>
+        [PublicAPI]
+        public void SendItemToDisplay(Events.ItemDisplayArgs args)
+        {
+            Events.ModifyDisplayItemInvoke(null, args);
+            Display.AddItem(args);
+        }
+
+        /// <summary>
+        /// Manually show an item on the recent items display
+        /// </summary>
+        /// <param name="message">The text to display</param>
+        /// <param name="sprite">The item sprite</param>
+        [PublicAPI]
+        public void SendItemToDisplay(string message, Sprite sprite)
+        {
+            Events.ItemDisplayArgs args = new Events.ItemDisplayArgs(string.Empty, string.Empty, sprite)
+            {
+                DisplayMessage = message
+            };
+            SendItemToDisplay(args);
+        }
+
+        /// <summary>
+        /// Manually show an item on the recent items display
+        /// </summary>
+        /// <param name="name">The name of the item</param>
+        /// <param name="source">The source of the item (e.g. area name)</param>
+        /// <param name="sprite">The sprite to display</param>
+        [PublicAPI]
+        public void SendItemToDisplay(string name, string source, Sprite sprite)
+        {
+            Events.ItemDisplayArgs args = new Events.ItemDisplayArgs(name, source, sprite);
+            SendItemToDisplay(args);
         }
 
         public override string GetVersion()
