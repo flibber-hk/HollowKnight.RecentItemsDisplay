@@ -119,7 +119,7 @@ namespace RecentItemsDisplay
                                 new Type[] { typeof(string), typeof(Sprite) }, null);
                             }
                             return _showItem_string_Sprite;
-                       }
+                        }
                     }
                     catch (Exception ex)
                     {
