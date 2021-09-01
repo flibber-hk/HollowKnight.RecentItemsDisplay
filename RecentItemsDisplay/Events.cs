@@ -89,7 +89,7 @@ namespace RecentItemsDisplay
          */
         // We then define the function Events_ModifyDisplayItem as follows:
         /*
-                private void Events_ModifyDisplayItem(object arg1, object arg2)
+                private void Events_ModifyDisplayItem(EventArgs arg1, EventArgs arg2)
                 {
                     ItemChanger.ReadOnlyGiveEventArgs giveArgs = arg1 as ItemChanger.ReadOnlyGiveEventArgs;
                     RecentItemsDisplay.Events.ItemDisplayArgs displayArgs = arg2 as RecentItemsDisplay.Events.ItemDisplayArgs;
@@ -97,6 +97,6 @@ namespace RecentItemsDisplay
                     // Code goes here
                 }
          */
-        // This procedure requires RecentItemsDisplay to be referenced.
+        // This procedure requires a reference to RecentItemsDisplay.
     }
 }

@@ -102,38 +102,25 @@ namespace RecentItemsDisplay
         }
 
         // In order to directly send an item to the display without requiring RecentItems to be installed, we can use a pattern like this.
+        // First, we store a reference to the function we want to be using. We can do this efficiently by using the FastReflectionDelegate in
+        // MonoMod.Utils (requires a reference to that dll).
         /*
-            private MethodInfo _showItem_string_Sprite;
-            private MethodInfo ShowItem_string_Sprite
+            private static readonly FastReflectionDelegate ShowItem_string_string_Sprite = Type.GetType("RecentItemsDisplay.RecentItems, RecentItemsDisplay")?
+                                     .GetMethod("ShowItem", BindingFlags.Public | BindingFlags.Static, null, CallingConventions.Any,
+                                            new Type[] { typeof(string), typeof(string), typeof(Sprite) }, null)
+                                     .GetFastDelegate();
+        */
+        // We then create a wrapper for this function which matches ShowItem from this mod.
+        /*    
+            internal static void ShowItem(string name, string source, Sprite sprite)
             {
-                get
+                if (ShowItem_string_string_Sprite != null)
                 {
-                    try
-                    {
-                        if (ModHooks.GetMod("RecentItems") is Mod _)
-                        {
-                            if (_showItem_string_Sprite == null)
-                            {
-                                _showItem_string_Sprite = Type.GetType("RecentItemsDisplay.RecentItems, RecentItemsDisplay")
-                                .GetMethod("ShowItem", BindingFlags.Public | BindingFlags.Static, null, CallingConventions.Any,
-                                new Type[] { typeof(string), typeof(Sprite) }, null);
-                            }
-                            return _showItem_string_Sprite;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        LogWarn("Error finding Recent Items\n" + ex);
-                    }
-                    return null;
+                    ShowItem_string_string_Sprite(null, new object[] { name, source, sprite });
                 }
             }
-
-            private void ShowItem(string st, Sprite sp)
-            {
-                ShowItem_string_Sprite?.Invoke(null, new object[] { st, sp });
-            }
         */
+        // We can now use ShowItem as normal, and nothing will happen if RecentItems is not installed.
         #endregion
 
         public override string GetVersion()
