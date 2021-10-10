@@ -47,12 +47,12 @@ namespace RecentItemsDisplay
 
         private void SendItemToDisplay(ReadOnlyGiveEventArgs obj)
         {
-            string item = obj.Item.UIDef.GetPostviewName();
+            UIDef def = obj.Item.GetResolvedUIDef(obj.Placement);
+            
+            string item = def.GetPostviewName();
             string scene = GetSceneFromPlacement(obj.Placement);
-
             string source = AreaName.CleanAreaName(scene);
-
-            Sprite sprite = obj.Item.UIDef.GetSprite();
+            Sprite sprite = def.GetSprite();
 
             Events.ItemDisplayArgs args = new Events.ItemDisplayArgs(item, source, sprite);
             Events.ModifyDisplayItemInvoke(obj, args);
