@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
+using ItemChanger;
 using Modding;
 using UnityEngine;
 
@@ -43,14 +41,15 @@ namespace RecentItemsDisplay
             Display.Hook();
             AreaName.LoadData();
 
-            ItemChanger.Events.AfterGive += SendItemToDisplay;
+            AbstractItem.AfterGiveGlobal += SendItemToDisplay;
         }
 
 
-        private void SendItemToDisplay(ItemChanger.ReadOnlyGiveEventArgs obj)
+        private void SendItemToDisplay(ReadOnlyGiveEventArgs obj)
         {
             string item = obj.Item.UIDef.GetPostviewName();
-            string scene = obj.Placement.Location.sceneName;
+            string scene = GetSceneFromPlacement(obj.Placement);
+
             string source = AreaName.CleanAreaName(scene);
 
             Sprite sprite = obj.Item.UIDef.GetSprite();
@@ -59,6 +58,36 @@ namespace RecentItemsDisplay
             Events.ModifyDisplayItemInvoke(obj, args);
 
             Display.AddItem(args);
+        }
+
+        private string GetSceneFromPlacement(AbstractPlacement placement)
+        {
+            if (placement is ItemChanger.Placements.AutoPlacement apmt)
+            {
+                return apmt.Location.sceneName;
+            }
+            else if (placement is ItemChanger.Placements.MutablePlacement mpmt)
+            {
+                return mpmt.Location.sceneName;
+            }
+            else if (placement is ItemChanger.Placements.DualPlacement dpmt)
+            {
+                return dpmt.Location.sceneName;
+            }
+            else if (placement is ItemChanger.Placements.EggShopPlacement epmt)
+            {
+                return epmt.Location.sceneName;
+            }
+            else if (placement is ItemChanger.Placements.ShopPlacement spmt)
+            {
+                return spmt.Location.sceneName;
+            }
+            else if (placement is ItemChanger.Placements.YNShinyPlacement ypmt)
+            {
+                return ypmt.Location.sceneName;
+            }
+
+            return string.Empty;
         }
 
         #region API

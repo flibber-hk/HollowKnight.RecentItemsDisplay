@@ -31,6 +31,8 @@ namespace RecentItemsDisplay
 
         public static string CleanAreaName(string scene)
         {
+            if (string.IsNullOrEmpty(scene)) return string.Empty;
+
             foreach (string suffix in suffixes)
             {
                 if (scene.EndsWith(suffix))
