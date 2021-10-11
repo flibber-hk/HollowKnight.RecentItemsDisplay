@@ -62,31 +62,10 @@ namespace RecentItemsDisplay
 
         private string GetSceneFromPlacement(AbstractPlacement placement)
         {
-            if (placement is ItemChanger.Placements.AutoPlacement apmt)
+            if (placement is ItemChanger.Placements.IPrimaryLocationPlacement locpmt)
             {
-                return apmt.Location.sceneName;
+                return locpmt.Location.sceneName;
             }
-            else if (placement is ItemChanger.Placements.MutablePlacement mpmt)
-            {
-                return mpmt.Location.sceneName;
-            }
-            else if (placement is ItemChanger.Placements.DualPlacement dpmt)
-            {
-                return dpmt.Location.sceneName;
-            }
-            else if (placement is ItemChanger.Placements.EggShopPlacement epmt)
-            {
-                return epmt.Location.sceneName;
-            }
-            else if (placement is ItemChanger.Placements.ShopPlacement spmt)
-            {
-                return spmt.Location.sceneName;
-            }
-            else if (placement is ItemChanger.Placements.YNShinyPlacement ypmt)
-            {
-                return ypmt.Location.sceneName;
-            }
-
             return string.Empty;
         }
 

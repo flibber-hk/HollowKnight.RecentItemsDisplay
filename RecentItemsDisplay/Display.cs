@@ -33,6 +33,8 @@ namespace RecentItemsDisplay
             canvas = null;
 
             items.Clear();
+
+            invPanels = 0;
         }
 
         public static void AddItem(Events.ItemDisplayArgs args)
@@ -94,9 +96,7 @@ namespace RecentItemsDisplay
             canvas.SetActive(false);
         }
 
-        // Hacky solution to the problem where we open multiple panels at once, which happens when showing lore dialogue in a shop.
-        // In future, a less lazy implementation of shop lore which closes the shop menu (temporarily, perhaps) rather than yeeting 
-        // it off screen would deal with this problem more sensibly.
+        // Hacky solution to the problem where multiple panels are opened at once
         private static int invPanels = 0;
 
         internal static void Hook()
@@ -107,7 +107,7 @@ namespace RecentItemsDisplay
             On.QuitToMenu.Start += OnQuitToMenu;
             On.InvAnimateUpAndDown.AnimateUp += OnInventoryOpen;
             On.InvAnimateUpAndDown.AnimateDown += OnInventoryClose;
-            On.UIManager.GoToPauseMenu += OnPause;
+            On.UIManager.UIGoToPauseMenu += OnPause;
             On.UIManager.UIClosePauseMenu += OnUnpause;
         }
 
@@ -117,7 +117,7 @@ namespace RecentItemsDisplay
             On.QuitToMenu.Start -= OnQuitToMenu;
             On.InvAnimateUpAndDown.AnimateUp -= OnInventoryOpen;
             On.InvAnimateUpAndDown.AnimateDown -= OnInventoryClose;
-            On.UIManager.GoToPauseMenu -= OnPause;
+            On.UIManager.UIGoToPauseMenu -= OnPause;
             On.UIManager.UIClosePauseMenu -= OnUnpause;
         }
 
@@ -144,21 +144,27 @@ namespace RecentItemsDisplay
         {
             orig(self);
             invPanels--;
-            if (invPanels <= 0) Show();
+            if (invPanels <= 0)
+            {
+                if (invPanels < 0)
+                {
+                    invPanels = 0;
+                    RecentItems.instance.LogWarn("invPanels less than 0");
+                }
+                Show();
+            }
         }
 
-        private static IEnumerator OnPause(On.UIManager.orig_GoToPauseMenu orig, UIManager self)
+        private static void OnPause(On.UIManager.orig_UIGoToPauseMenu orig, UIManager self)
         {
-            //yield return orig(self);
-
             // Failsafe
             if (invPanels != 0)
             {
-                RecentItems.instance.LogWarn("Warning: invPanels not equal to 0 on pause");
+                RecentItems.instance.LogWarn("invPanels not equal to 0 on pause");
                 invPanels = 0;
             }
             Hide();
-            return orig(self);
+            orig(self);
         }
 
         private static void OnUnpause(On.UIManager.orig_UIClosePauseMenu orig, UIManager self)
