@@ -1,8 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Modding;
 using UnityEngine;
 
@@ -10,6 +7,8 @@ namespace RecentItemsDisplay
 {
     internal static class Display
     {
+        public const int MaxDisplayableItems = 10;
+
         private static Queue<GameObject> items = new Queue<GameObject>();
 
         private static GameObject canvas;
@@ -37,13 +36,8 @@ namespace RecentItemsDisplay
             invPanels = 0;
         }
 
-        public static void AddItem(Events.ItemDisplayArgs args)
+        internal static void AddItem(Sprite sprite, string msg)
         {
-            if (args.IgnoreItem) return;
-
-            string msg = args.GetMessage();
-            Sprite sprite = args.DisplaySprite;
-
             if (canvas == null)
             {
                 Create();
@@ -56,12 +50,12 @@ namespace RecentItemsDisplay
             if (sprite != null)
             {
                 CanvasUtil.CreateImagePanel(basePanel, sprite,
-                    new CanvasUtil.RectData(new Vector2(50, 50), Vector2.zero, new Vector2(0f, 0.5f),
-                        new Vector2(0f, 0.5f)));
+                    new CanvasUtil.RectData(new Vector2(50, 50), Vector2.zero, new Vector2(-0.1f, 0.5f),
+                        new Vector2(-0.1f, 0.5f)));
             }
             CanvasUtil.CreateTextPanel(basePanel, msg, 24, TextAnchor.MiddleLeft,
                 new CanvasUtil.RectData(new Vector2(400, 100), Vector2.zero,
-                new Vector2(1.2f, 0.5f), new Vector2(1.2f, 0.5f)),
+                new Vector2(1.1f, 0.5f), new Vector2(1.1f, 0.5f)),
                 CanvasUtil.GetFont("Perpetua"));
 
             items.Enqueue(basePanel);
@@ -103,7 +97,7 @@ namespace RecentItemsDisplay
         {
             UnHook();
 
-            //ModHooks.Instance.AfterSavegameLoadHook += OnLoad; 
+            On.GameManager.FinishedEnteringScene += OnFinishedEnteringScene;
             On.QuitToMenu.Start += OnQuitToMenu;
             On.InvAnimateUpAndDown.AnimateUp += OnInventoryOpen;
             On.InvAnimateUpAndDown.AnimateDown += OnInventoryClose;
@@ -113,7 +107,7 @@ namespace RecentItemsDisplay
 
         internal static void UnHook()
         {
-            //ModHooks.Instance.AfterSavegameLoadHook -= OnLoad;
+            On.GameManager.FinishedEnteringScene -= OnFinishedEnteringScene;
             On.QuitToMenu.Start -= OnQuitToMenu;
             On.InvAnimateUpAndDown.AnimateUp -= OnInventoryOpen;
             On.InvAnimateUpAndDown.AnimateDown -= OnInventoryClose;
@@ -121,15 +115,21 @@ namespace RecentItemsDisplay
             On.UIManager.UIClosePauseMenu -= OnUnpause;
         }
 
-        // It probably doesn't fit to show a recent items popup on load in non-multi
-        //private static void OnLoad(SaveGameData data)
-        //{
-        //    Create();
-        //}
+        private static bool SentItemsFromSave = false;
+        private static void OnFinishedEnteringScene(On.GameManager.orig_FinishedEnteringScene orig, GameManager self)
+        {
+            orig(self);
+            if (!SentItemsFromSave)
+            {
+                RecentItems.saveData.SendAll();
+                SentItemsFromSave = true;
+            }
+        }
 
         private static IEnumerator OnQuitToMenu(On.QuitToMenu.orig_Start orig, QuitToMenu self)
         {
             Destroy();
+            SentItemsFromSave = false;
             return orig(self);
         }
 
