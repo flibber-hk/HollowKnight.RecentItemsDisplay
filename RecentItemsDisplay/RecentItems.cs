@@ -47,7 +47,7 @@ namespace RecentItemsDisplay
 
         private void SendItemToDisplay(ReadOnlyGiveEventArgs obj)
         {
-            UIDef def = obj.Item.GetResolvedUIDef(obj.Placement);
+            UIDef def = obj.Item.UIDef;
             
             string item = def.GetPostviewName();
             string scene = GetSceneFromPlacement(obj.Placement);
