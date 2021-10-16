@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using ItemChanger;
 using Newtonsoft.Json;
 
 namespace RecentItemsDisplay
@@ -39,15 +40,21 @@ namespace RecentItemsDisplay
 
             switch (scene)
             {
-                // We can treat shops as special cases
-                case "Room_mapper": return "Iselda";
-                case "Room_shop": return "Sly";
-                case "Room_Charm_Shop": return "Salubra";
-                case "Fungus2_26": return "Leg Eater";
-                case "Crossroads_38": return "Grubfather";
-                case "RestingGrounds_07": return "Seer";
-                case "Room_Ouiji": return "Jiji";
-                case "Room_Jinn": return "Jinn";
+                // We can treat shops and scenes with just an NPC as special cases
+                case SceneNames.Room_mapper: return "Iselda";
+                case SceneNames.Room_shop: return "Sly";
+                case SceneNames.Room_Charm_Shop: return "Salubra";
+                case SceneNames.Fungus2_26: return "Leg Eater";
+                case SceneNames.Crossroads_38: return "Grubfather";
+                case SceneNames.RestingGrounds_07: return "Seer";
+                case SceneNames.Room_Ouiji: return "Jiji";
+                case SceneNames.Room_Jinn: return "Jinn";
+                // Forward compatibility
+                case SceneNames.Room_nailsmith: return "Nailsmith";
+                case SceneNames.Room_Mask_Maker: return "Mask Maker";
+                case SceneNames.Room_Tram:
+                case SceneNames.Room_Tram_RG:
+                    return "Tram";
 
                 default:
                     if (sceneToArea.TryGetValue(scene, out string area))

@@ -379,5 +379,9 @@
     "Room_Colosseum_Gold": "Colosseum",
     "Room_Colosseum_Silver": "Colosseum",
     "Room_Jinn": "Dirtmouth",
-    "Room_Sly_Storeroom": "Dirtmouth"
+    "Room_Sly_Storeroom": "Dirtmouth",
+    "Cutscene_Boss_Door": "Black Egg Temple",
+    "Dream_Final_Boss": "Black Egg Temple",
+    "Room_Final_Boss_Atrium": "Black Egg Temple",
+    "Room_Final_Boss_Core": "Black Egg Temple"
 }

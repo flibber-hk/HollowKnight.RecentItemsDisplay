@@ -64,7 +64,14 @@ namespace RecentItemsDisplay
 
             if (args.Placement is ItemChanger.Placements.IPrimaryLocationPlacement locpmt)
             {
-                DisplaySource = AreaName.CleanAreaName(locpmt.Location.sceneName);
+                if (locpmt.Location is ItemChanger.Locations.StartLocation)
+                {
+                    DisplaySource = "";
+                }
+                else
+                {
+                    DisplaySource = AreaName.CleanAreaName(locpmt.Location.sceneName);
+                }
             }
 
             if (args.Item.UIDef is ItemChanger.UIDefs.MsgUIDef msgUIDef)
