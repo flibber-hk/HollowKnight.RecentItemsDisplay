@@ -47,12 +47,26 @@ namespace RecentItemsDisplay
         public ItemDisplayArgs(ReadOnlyGiveEventArgs args)
         {
             GiveEventArgs = args;
+
+            if (args?.Item?.UIDef == null)
+            {
+                DisplayName = null;
+                DisplaySource = null;
+                DisplaySprite = new EmptySprite();
+                IgnoreItem = true;
+
+                RecentItems.instance.Log("Incomplete item def sent to display");
+
+                return;
+            }
+
             DisplayName = args.Item.UIDef.GetPostviewName();
 
             if (args.Placement is ItemChanger.Placements.IPrimaryLocationPlacement locpmt)
             {
                 DisplaySource = AreaName.CleanAreaName(locpmt.Location.sceneName);
             }
+
             if (args.Item.UIDef is ItemChanger.UIDefs.MsgUIDef msgUIDef)
             {
                 DisplaySprite = msgUIDef.sprite;

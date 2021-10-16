@@ -1,4 +1,5 @@
-﻿using ItemChanger;
+﻿using System;
+using ItemChanger;
 using UnityEngine;
 using JetBrains.Annotations;
 
@@ -19,8 +20,17 @@ namespace RecentItemsDisplay
         {
             Events.ModifyDisplayItemInvoke(args);
 
-            RecentItems.saveData.Save(args.DisplaySprite, args.GetMessage());
-            ShowItemInternal(args.DisplaySprite, args.GetMessage());
+            if (args.IgnoreItem) return;
+
+            try
+            {
+                RecentItems.saveData.Save(args.DisplaySprite, args.GetMessage());
+                ShowItemInternal(args.DisplaySprite, args.GetMessage());
+            }
+            catch (Exception ex)
+            {
+                RecentItems.instance.LogError("Error displaying item\n" + ex);
+            }
         }
 
         /// <summary>
