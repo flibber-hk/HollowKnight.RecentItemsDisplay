@@ -5,6 +5,11 @@ using UnityEngine;
 
 namespace RecentItemsDisplay
 {
+    internal class Data : MonoBehaviour
+    {
+        internal string text;
+    }
+
     internal static class Display
     {
         public const int MaxDisplayableItems = 10;
@@ -47,6 +52,8 @@ namespace RecentItemsDisplay
                 new CanvasUtil.RectData(new Vector2(200, 50), Vector2.zero,
                 new Vector2(0.9f, 0.9f), new Vector2(0.9f, 0.9f)));
 
+            basePanel.AddComponent<Data>().text = msg;
+
             if (sprite != null)
             {
                 CanvasUtil.CreateImagePanel(basePanel, sprite,
@@ -59,7 +66,7 @@ namespace RecentItemsDisplay
                 CanvasUtil.GetFont("Perpetua"));
 
             items.Enqueue(basePanel);
-            if (items.Count > RecentItems.globalSettings.MaxItems)
+            if (items.Count > MaxDisplayableItems)
             {
                 Object.Destroy(items.Dequeue());
             }
@@ -75,6 +82,7 @@ namespace RecentItemsDisplay
                 Vector2 newPos = new Vector2(0.9f, 0.9f - 0.06f * i--);
                 item.GetComponent<RectTransform>().anchorMin = newPos;
                 item.GetComponent<RectTransform>().anchorMax = newPos;
+                item.SetActive(i < RecentItems.globalSettings.MaxItems - 1);
             }
         }
 
@@ -171,6 +179,7 @@ namespace RecentItemsDisplay
         {
             orig(self);
             Show();
+            UpdatePositions();
         }
     }
 }

@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using ItemChanger;
 using Modding;
+using UnityEngine;
 
 namespace RecentItemsDisplay
 {
@@ -9,7 +13,11 @@ namespace RecentItemsDisplay
         internal static RecentItems instance;
 
         public static GlobalSettings globalSettings { get; set; } = new GlobalSettings();
-        public void OnLoadGlobal(GlobalSettings s) => globalSettings = s;
+        public void OnLoadGlobal(GlobalSettings s)
+        {
+            s.MaxItems = Mathf.Clamp(s.MaxItems, 1, Display.MaxDisplayableItems);
+            globalSettings = s;
+        }
         public GlobalSettings OnSaveGlobal() => globalSettings;
 
         public static SaveData saveData { get; set; } = new SaveData();
@@ -19,17 +27,27 @@ namespace RecentItemsDisplay
         #region Menu
         public List<IMenuMod.MenuEntry> GetMenuData(IMenuMod.MenuEntry? toggleButtonEntry)
         {
-            return new List<IMenuMod.MenuEntry>()
+            List<IMenuMod.MenuEntry> entries = new List<IMenuMod.MenuEntry>();
+
+            entries.Add(new IMenuMod.MenuEntry()
             {
-                new IMenuMod.MenuEntry
-                {
-                    Name = "Show Display:",
-                    Description = string.Empty,
-                    Values = new string[]{ "True", "False" },
-                    Saver = opt => globalSettings.ShowDisplay = opt == 0,
-                    Loader = () => globalSettings.ShowDisplay ? 0 : 1
-                }
-            };
+                Name = "Show Display",
+                Description = string.Empty,
+                Values = new string[] { "True", "False" },
+                Saver = opt => globalSettings.ShowDisplay = opt == 0,
+                Loader = () => globalSettings.ShowDisplay ? 0 : 1
+            });
+
+            entries.Add(new IMenuMod.MenuEntry()
+            {
+                Name = "Max Displayable Items",
+                Description = string.Empty,
+                Values = Enumerable.Range(1, Display.MaxDisplayableItems).Select(x => x.ToString()).ToArray(),
+                Saver = opt => globalSettings.MaxItems = opt + 1,
+                Loader = () => globalSettings.MaxItems - 1
+            });
+
+            return entries;
         }
         public bool ToggleButtonInsideMenu => false;
         #endregion
