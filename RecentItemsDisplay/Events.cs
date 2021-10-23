@@ -83,11 +83,13 @@ namespace RecentItemsDisplay
                 DisplaySprite = new BoxedSprite(args.Item.UIDef.GetSprite());
             }
 
+            // Don't show item if they already obtained it
+            IgnoreItem = args.OriginalState != ObtainState.Unobtained;
         }
 
         /// <summary>
         /// The message shown. If the DisplayMessage property is set, then it will be that;
-        /// otherwise will default to DisplayName // from DisplaySource
+        /// otherwise will default to "DisplayName\nfrom DisplaySource"
         /// </summary>
         /// <returns></returns>
         public string GetMessage()
@@ -130,15 +132,14 @@ namespace RecentItemsDisplay
     // In order to subscribe to the ModifyDisplayItem event without requiring RecentItems to be installed, we can do so using the following code:
     /*
             Type recentItemsEvents = Type.GetType("RecentItemsDisplay.Events, RecentItemsDisplay");
-            if (recentItemsEvents == null) { Log("Did not Hook RID"); return; }
-            recentItemsEvents.GetEvent("ModifyDisplayItem").AddEventHandler(null, (Action<EventArgs, EventArgs>)Events_ModifyDisplayItem);
+            if (recentItemsEvents == null) { Log("Did not hook RecentItemsDisplay"); return; }
+            recentItemsEvents.GetEvent("ModifyDisplayItem").AddEventHandler(null, (Action<EventArgs>)Events_ModifyDisplayItem);
      */
     // We then define the function Events_ModifyDisplayItem as follows:
     /*
-            private void Events_ModifyDisplayItem(EventArgs arg1, EventArgs arg2)
+            private void Events_ModifyDisplayItem(EventArgs args)
             {
-                ItemChanger.ReadOnlyGiveEventArgs giveArgs = arg1 as ItemChanger.ReadOnlyGiveEventArgs;
-                RecentItemsDisplay.ItemDisplayArgs displayArgs = arg2 as RecentItemsDisplay.ItemDisplayArgs;
+                RecentItemsDisplay.ItemDisplayArgs displayArgs = args as RecentItemsDisplay.ItemDisplayArgs;
 
                 // Code goes here
             }
