@@ -5,11 +5,6 @@ using UnityEngine;
 
 namespace RecentItemsDisplay
 {
-    internal class Data : MonoBehaviour
-    {
-        internal string text;
-    }
-
     internal static class Display
     {
         public const int MaxDisplayableItems = 10;
@@ -51,8 +46,6 @@ namespace RecentItemsDisplay
             GameObject basePanel = CanvasUtil.CreateBasePanel(canvas,
                 new CanvasUtil.RectData(new Vector2(200, 50), Vector2.zero,
                 new Vector2(0.9f, 0.9f), new Vector2(0.9f, 0.9f)));
-
-            basePanel.AddComponent<Data>().text = msg;
 
             if (sprite != null)
             {
