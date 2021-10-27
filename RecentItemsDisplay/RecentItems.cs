@@ -47,6 +47,15 @@ namespace RecentItemsDisplay
                 Loader = () => globalSettings.MaxItems - 1
             });
 
+            entries.Add(new IMenuMod.MenuEntry()
+            {
+                Name = "Show Refreshed Items",
+                Description = "Toggle whether to send items to the display when it's not your first time picking them up",
+                Values = new string[] { "True", "False" },
+                Saver = opt => globalSettings.ShowRefreshedItems = opt == 0,
+                Loader = () => globalSettings.ShowRefreshedItems ? 0 : 1
+            });
+
             return entries;
         }
         public bool ToggleButtonInsideMenu => false;

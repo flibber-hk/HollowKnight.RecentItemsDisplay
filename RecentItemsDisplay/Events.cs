@@ -84,7 +84,10 @@ namespace RecentItemsDisplay
             }
 
             // Don't show item if they already obtained it
-            IgnoreItem = args.OriginalState != ObtainState.Unobtained;
+            if (!RecentItems.globalSettings.ShowRefreshedItems && args.OriginalState != ObtainState.Unobtained)
+            {
+                IgnoreItem = true;
+            }
         }
 
         /// <summary>
