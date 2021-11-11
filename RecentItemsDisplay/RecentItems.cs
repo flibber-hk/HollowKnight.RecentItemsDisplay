@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ItemChanger;
 using Modding;
+using MonoMod.ModInterop;
 using UnityEngine;
 
 namespace RecentItemsDisplay
@@ -70,6 +71,7 @@ namespace RecentItemsDisplay
             AreaName.LoadData();
 
             AbstractItem.AfterGiveGlobal += SendItemToDisplay;
+            typeof(ItemDisplayMethods).ModInterop();
         }
 
 

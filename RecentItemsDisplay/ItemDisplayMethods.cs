@@ -1,5 +1,6 @@
 ﻿using System;
 using ItemChanger;
+using MonoMod.ModInterop;
 using UnityEngine;
 using JetBrains.Annotations;
 
@@ -8,6 +9,7 @@ namespace RecentItemsDisplay
     /// <summary>
     /// A collection of methods to send an item to the display
     /// </summary>
+    [ModExportName("RecentItemsDisplay")]
     public static class ItemDisplayMethods
     {
         #region API
@@ -35,6 +37,7 @@ namespace RecentItemsDisplay
 
         /// <summary>
         /// Show an item on the recent items display, given a message and a sprite
+        /// The sprite will not be properly displayed when reloading a file.
         /// </summary>
         /// <param name="message">The text to display</param>
         /// <param name="sprite">The sprite to display</param>
@@ -51,6 +54,7 @@ namespace RecentItemsDisplay
         /// <summary>
         /// Show an item on the recent items display, given a name, source and sprite. 
         /// The message will be formatted as name // from source
+        /// The sprite will not be properly displayed when reloading a file.
         /// </summary>
         /// <param name="name">The name of the item</param>
         /// <param name="source">The source of the item (e.g. area name)</param>
