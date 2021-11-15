@@ -123,7 +123,18 @@ namespace RecentItemsDisplay
 
         public static void ShowItemInternal(ISprite sprite, string text)
         {
-            Display.AddItem(sprite.Value, text);        // Display.AddItem(Sprite.GetValue, text);
+            Sprite spriteValue;
+            try
+            {
+                spriteValue = sprite.Value;
+            }
+            catch (Exception ex)
+            {
+                RecentItems.instance.LogError("Failed to get sprite: " + ex);
+                spriteValue = new EmptySprite().Value;
+            }
+
+            Display.AddItem(spriteValue, text);        // Display.AddItem(Sprite.GetValue, text);
         }
     }
 }
