@@ -9,8 +9,8 @@ namespace RecentItemsDisplay
         public static void Setup()
         {
             DebugMod.AddActionToKeyBindList(Reset, "Default Position", CATEGORY);
-            DebugMod.AddActionToKeyBindList(GetMover(-0.02f, 0), "Move Display Left", CATEGORY);
-            DebugMod.AddActionToKeyBindList(GetMover(0.02f, 0), "Move Display Right", CATEGORY);
+            DebugMod.AddActionToKeyBindList(GetMover(-0.0125f, 0), "Move Display Left", CATEGORY);
+            DebugMod.AddActionToKeyBindList(GetMover(0.0125f, 0), "Move Display Right", CATEGORY);
             DebugMod.AddActionToKeyBindList(GetMover(0, 0.02f), "Move Display Up", CATEGORY);
             DebugMod.AddActionToKeyBindList(GetMover(0, -0.02f), "Move Display Down", CATEGORY);
         }
