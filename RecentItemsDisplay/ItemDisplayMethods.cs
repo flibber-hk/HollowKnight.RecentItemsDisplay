@@ -9,7 +9,6 @@ namespace RecentItemsDisplay
     /// <summary>
     /// A collection of methods to send an item to the display
     /// </summary>
-    [ModExportName("RecentItemsDisplay")]
     public static class ItemDisplayMethods
     {
         #region API

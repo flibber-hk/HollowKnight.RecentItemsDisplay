@@ -21,7 +21,8 @@ namespace RecentItemsDisplay
 
             CanvasUtil.CreateTextPanel(canvas, "Recent Items", 24, TextAnchor.MiddleCenter,
                 new CanvasUtil.RectData(new Vector2(200, 100), Vector2.zero,
-                new Vector2(0.87f, 0.95f), new Vector2(0.87f, 0.95f)));
+                RecentItems.globalSettings.AnchorPoint + new Vector2(-0.025f, 0.05f), 
+                RecentItems.globalSettings.AnchorPoint + new Vector2(-0.025f, 0.05f)));
 
             if (invPanels <= 0) Show();
         }
@@ -36,6 +37,13 @@ namespace RecentItemsDisplay
             invPanels = 0;
         }
 
+        public static void Redraw()
+        {
+            Destroy();
+            Create();
+            RecentItems.saveData.SendAll();
+        }
+
         internal static void AddItem(Sprite sprite, string msg)
         {
             if (canvas == null)
@@ -45,7 +53,7 @@ namespace RecentItemsDisplay
 
             GameObject basePanel = CanvasUtil.CreateBasePanel(canvas,
                 new CanvasUtil.RectData(new Vector2(200, 50), Vector2.zero,
-                new Vector2(0.9f, 0.9f), new Vector2(0.9f, 0.9f)));
+                RecentItems.globalSettings.AnchorPoint, RecentItems.globalSettings.AnchorPoint));
 
             if (sprite != null)
             {
@@ -72,7 +80,7 @@ namespace RecentItemsDisplay
             int i = items.Count - 1;
             foreach (GameObject item in items)
             {
-                Vector2 newPos = new Vector2(0.9f, 0.9f - 0.06f * i--);
+                Vector2 newPos = RecentItems.globalSettings.AnchorPoint + new Vector2(0, - 0.06f * i--);
                 item.GetComponent<RectTransform>().anchorMin = newPos;
                 item.GetComponent<RectTransform>().anchorMax = newPos;
                 item.SetActive(i < RecentItems.globalSettings.MaxItems - 1);

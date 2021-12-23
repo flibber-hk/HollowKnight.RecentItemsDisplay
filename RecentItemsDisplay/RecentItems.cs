@@ -13,6 +13,12 @@ namespace RecentItemsDisplay
     {
         internal static RecentItems instance;
 
+        public RecentItems() : base(null)
+        {
+            instance = this;
+            typeof(Export).ModInterop();
+        }
+
         public static GlobalSettings globalSettings { get; set; } = new GlobalSettings();
         public void OnLoadGlobal(GlobalSettings s)
         {
@@ -65,13 +71,13 @@ namespace RecentItemsDisplay
         public override void Initialize()
         {
             Log("Initializing...");
-            instance = this;
 
             Display.Hook();
             AreaName.LoadData();
 
             AbstractItem.AfterGiveGlobal += SendItemToDisplay;
-            typeof(ItemDisplayMethods).ModInterop();
+
+            ManualConfig.Setup();
         }
 
 
