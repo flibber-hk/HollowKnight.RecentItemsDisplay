@@ -6,6 +6,7 @@ using ItemChanger;
 using Modding;
 using MonoMod.ModInterop;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace RecentItemsDisplay
 {
@@ -63,6 +64,8 @@ namespace RecentItemsDisplay
                 Loader = () => globalSettings.ShowRefreshedItems ? 0 : 1
             });
 
+            // Shorten the description of Show Refreshed Items before adding to the menu
+
             return entries;
         }
         public bool ToggleButtonInsideMenu => false;
@@ -89,7 +92,19 @@ namespace RecentItemsDisplay
 
         public override string GetVersion()
         {
-            return "1.0";
+            return GetType().Assembly.GetName().Version.ToString();
+        }
+
+        public void RefreshMenu()
+        {
+            MenuScreen screen = ModHooks.BuiltModMenuScreens[this];
+            if (screen != null)
+            {
+                foreach (MenuOptionHorizontal option in screen.GetComponentsInChildren<MenuOptionHorizontal>())
+                {
+                    option.menuSetting.RefreshValueFromGameSettings();
+                }
+            }
         }
     }
 }

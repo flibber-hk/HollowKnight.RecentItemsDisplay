@@ -4,13 +4,14 @@
     <TargetFramework>net472</TargetFramework>
     <RootNamespace>RecentItemsDisplay</RootNamespace>
     <AssemblyTitle>RecentItemsDisplay</AssemblyTitle>
-	<AssemblyVersion>1.0.0</AssemblyVersion>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
     <Deterministic>true</Deterministic>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <LangVersion>latest</LangVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>1701;1702;CS1591</NoWarn>
   </PropertyGroup>
+  
   <ItemGroup>
     <None Remove="Resources\**\*.png" />
     <None Remove="Resources\**\*.json" />
@@ -21,9 +22,11 @@
     <EmbeddedResource Include="Resources\**\*.json" />
     <EmbeddedResource Include="Resources\**\*.xml" />
   </ItemGroup>
+  
   <PropertyGroup>
-	<HollowKnightRefs>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed</HollowKnightRefs>
+    <HollowKnightRefs>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed</HollowKnightRefs>
   </PropertyGroup>
+  
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(HollowKnightRefs)\Assembly-CSharp.dll</HintPath>
@@ -52,14 +55,23 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(HollowKnightRefs)\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(HollowKnightRefs)\UnityEngine.UI.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(HollowKnightRefs)\UnityEngine.UIModule.dll</HintPath>
     </Reference>
   </ItemGroup>
-  
+
+  <Target Name="ClearReferenceCopyLocalPaths" AfterTargets="ResolveAssemblyReferences">
+    <ItemGroup>
+      <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" />
+    </ItemGroup>
+  </Target>
+
   <Target Name="CopyMod" AfterTargets="PostBuildEvent">
-	<Copy SourceFiles="$(TargetPath);$(TargetDir)$(TargetName).pdb;$(TargetDir)$(TargetName).xml" DestinationFolder="$(HollowKnightRefs)\Mods\$(TargetName)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(TargetPath);$(TargetDir)$(TargetName).pdb;$(TargetDir)$(TargetName).xml" DestinationFolder="$(HollowKnightRefs)\Mods\$(TargetName)" SkipUnchangedFiles="true" />
   </Target>
     
   <Target Name="CreateReleaseZip" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
@@ -67,7 +79,7 @@
     <Delete Files="$(ProjectDir)/$(TargetName).zip" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ProjectDir)/Output/" />
     <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(ProjectDir)/Output/" />
-	<Copy SourceFiles="$(TargetDir)$(TargetName).xml" DestinationFolder="$(ProjectDir)/Output/" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).xml" DestinationFolder="$(ProjectDir)/Output/" />
     <Copy SourceFiles="$(SolutionDir)/README.md" DestinationFolder="$(ProjectDir)/Output/" ContinueOnError="true" />
     <ZipDirectory DestinationFile="$(ProjectDir)/$(TargetName).zip" SourceDirectory="$(ProjectDir)/Output" />
     <RemoveDir Directories="$(ProjectDir)Output" />
@@ -77,4 +89,5 @@
     </GetFileHash>
     <Message Importance="High" Text="@(FilesWithHashes->'%(Identity): %(FileHash)')" />
   </Target>
+  
 </Project>

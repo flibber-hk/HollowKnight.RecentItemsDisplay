@@ -66,7 +66,7 @@ namespace RecentItemsDisplay
             {
                 if (locpmt.Location is ItemChanger.Locations.StartLocation)
                 {
-                    DisplaySource = "";
+                    DisplaySource = "Start";
                 }
                 else
                 {

@@ -13,6 +13,7 @@ namespace RecentItemsDisplay
             DebugMod.AddActionToKeyBindList(GetMover(0.0125f, 0), "Move Display Right", CATEGORY);
             DebugMod.AddActionToKeyBindList(GetMover(0, 0.02f), "Move Display Up", CATEGORY);
             DebugMod.AddActionToKeyBindList(GetMover(0, -0.02f), "Move Display Down", CATEGORY);
+            DebugMod.AddActionToKeyBindList(ToggleDisplay, "Toggle Display", CATEGORY);
         }
 
         public static void Reset()
@@ -29,6 +30,13 @@ namespace RecentItemsDisplay
                 Display.Redraw();
             }
             return Move;
+        }
+
+        private static void ToggleDisplay()
+        {
+            RecentItems.globalSettings.ShowDisplay = !RecentItems.globalSettings.ShowDisplay;
+            RecentItems.instance.RefreshMenu();
+            DebugMod.LogToConsole("Toggled Display");
         }
     }
 }
