@@ -9,7 +9,7 @@ namespace RecentItemsDisplay
     {
         public const int MaxDisplayableItems = 10;
 
-        private static Queue<GameObject> items = new Queue<GameObject>();
+        private static Queue<GameObject> items = new();
 
         private static GameObject canvas;
         public static void Create()
@@ -17,6 +17,11 @@ namespace RecentItemsDisplay
             if (canvas != null) return;
             // Create base canvas
             canvas = CanvasUtil.CreateCanvas(RenderMode.ScreenSpaceOverlay, new Vector2(1920, 1080));
+
+            CanvasGroup canvasGroup = canvas.GetComponent<CanvasGroup>();
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
+
             Object.DontDestroyOnLoad(canvas);
 
             CanvasUtil.CreateTextPanel(canvas, "Recent Items", 24, TextAnchor.MiddleCenter,
