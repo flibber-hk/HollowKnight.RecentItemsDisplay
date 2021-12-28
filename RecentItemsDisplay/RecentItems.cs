@@ -20,30 +20,30 @@ namespace RecentItemsDisplay
             typeof(Export).ModInterop();
         }
 
-        public static GlobalSettings globalSettings { get; set; } = new GlobalSettings();
+        public static GlobalSettings GS { get; set; } = new GlobalSettings();
         public void OnLoadGlobal(GlobalSettings s)
         {
             s.MaxItems = Mathf.Clamp(s.MaxItems, 1, Display.MaxDisplayableItems);
-            globalSettings = s;
+            GS = s;
         }
-        public GlobalSettings OnSaveGlobal() => globalSettings;
+        public GlobalSettings OnSaveGlobal() => GS;
 
-        public static SaveData saveData { get; set; } = new SaveData();
-        public void OnLoadLocal(SaveData s) => saveData = s;
-        public SaveData OnSaveLocal() => saveData;
+        public static SaveData SD { get; set; } = new SaveData();
+        public void OnLoadLocal(SaveData s) => SD = s;
+        public SaveData OnSaveLocal() => SD;
 
         #region Menu
         public List<IMenuMod.MenuEntry> GetMenuData(IMenuMod.MenuEntry? toggleButtonEntry)
         {
-            List<IMenuMod.MenuEntry> entries = new List<IMenuMod.MenuEntry>();
+            List<IMenuMod.MenuEntry> entries = new();
 
             entries.Add(new IMenuMod.MenuEntry()
             {
                 Name = "Show Display",
                 Description = string.Empty,
                 Values = new string[] { "True", "False" },
-                Saver = opt => globalSettings.ShowDisplay = opt == 0,
-                Loader = () => globalSettings.ShowDisplay ? 0 : 1
+                Saver = opt => GS.ShowDisplay = opt == 0,
+                Loader = () => GS.ShowDisplay ? 0 : 1
             });
 
             entries.Add(new IMenuMod.MenuEntry()
@@ -51,8 +51,8 @@ namespace RecentItemsDisplay
                 Name = "Max Displayable Items",
                 Description = string.Empty,
                 Values = Enumerable.Range(1, Display.MaxDisplayableItems).Select(x => x.ToString()).ToArray(),
-                Saver = opt => globalSettings.MaxItems = opt + 1,
-                Loader = () => globalSettings.MaxItems - 1
+                Saver = opt => GS.MaxItems = opt + 1,
+                Loader = () => GS.MaxItems - 1
             });
 
             entries.Add(new IMenuMod.MenuEntry()
@@ -60,8 +60,8 @@ namespace RecentItemsDisplay
                 Name = "Show Refreshed Items",
                 Description = "Toggle whether to send items to the display when it's not your first time picking them up",
                 Values = new string[] { "True", "False" },
-                Saver = opt => globalSettings.ShowRefreshedItems = opt == 0,
-                Loader = () => globalSettings.ShowRefreshedItems ? 0 : 1
+                Saver = opt => GS.ShowRefreshedItems = opt == 0,
+                Loader = () => GS.ShowRefreshedItems ? 0 : 1
             });
 
             // Shorten the description of Show Refreshed Items before adding to the menu

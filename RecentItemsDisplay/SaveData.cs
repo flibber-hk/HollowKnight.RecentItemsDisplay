@@ -6,11 +6,11 @@ namespace RecentItemsDisplay
 {
     public class SaveData
     {
-        public Queue<DisplayData> latestItems = new Queue<DisplayData>();
+        public Queue<DisplayData> latestItems = new();
 
-        internal void Save(ISprite sprite, string text)
+        internal void Save(UIDef def, string text)
         {
-            latestItems.Enqueue(new DisplayData(sprite, text));
+            latestItems.Enqueue(new DisplayData(def, text));
             if (latestItems.Count > Display.MaxDisplayableItems)
             {
                 latestItems.Dequeue();
@@ -21,7 +21,7 @@ namespace RecentItemsDisplay
         {
             foreach (DisplayData data in latestItems)
             {
-                ItemDisplayMethods.ShowItemInternal(data.sprite, data.text);
+                ItemDisplayMethods.ShowItemInternal(data.spriteHolder, data.text);
             }
         }
     }
@@ -29,20 +29,12 @@ namespace RecentItemsDisplay
     [Serializable]
     public struct DisplayData
     {
-        public ISprite sprite;
+        public UIDef spriteHolder;
         public string text;
 
-        public DisplayData(ISprite sprite, string text)
+        public DisplayData(UIDef spriteHolder, string text)
         {
-            if (sprite.GetType().IsSerializable)
-            {
-                this.sprite = sprite;
-            }
-            else
-            {
-                this.sprite = new EmptySprite();
-            }
-
+            this.spriteHolder = spriteHolder;
             this.text = text;
         }
     }

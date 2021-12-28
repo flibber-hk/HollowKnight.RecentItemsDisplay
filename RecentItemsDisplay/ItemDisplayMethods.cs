@@ -25,8 +25,8 @@ namespace RecentItemsDisplay
 
             try
             {
-                RecentItems.saveData.Save(args.DisplaySprite, args.GetMessage());
-                ShowItemInternal(args.DisplaySprite, args.GetMessage());
+                RecentItems.SD.Save(args.SpriteSource, args.GetMessage());
+                ShowItemInternal(args.SpriteSource, args.GetMessage());
             }
             catch (Exception ex)
             {
@@ -43,7 +43,7 @@ namespace RecentItemsDisplay
         [PublicAPI]
         public static void ShowItem(string message, Sprite sprite)
         {
-            ItemDisplayArgs args = new ItemDisplayArgs(string.Empty, string.Empty, sprite)
+            ItemDisplayArgs args = new(string.Empty, string.Empty, sprite)
             {
                 DisplayMessage = message
             };
@@ -61,7 +61,7 @@ namespace RecentItemsDisplay
         [PublicAPI]
         public static void ShowItem(string name, string source, Sprite sprite)
         {
-            ItemDisplayArgs args = new ItemDisplayArgs(name, source, sprite);
+            ItemDisplayArgs args = new(name, source, sprite);
             ShowItem(args);
         }
 
@@ -74,7 +74,7 @@ namespace RecentItemsDisplay
         [PublicAPI]
         public static void ShowItem(string message, ISprite sprite)
         {
-            ItemDisplayArgs args = new ItemDisplayArgs(string.Empty, string.Empty, sprite)
+            ItemDisplayArgs args = new(string.Empty, string.Empty, sprite)
             {
                 DisplayMessage = message
             };
@@ -92,7 +92,7 @@ namespace RecentItemsDisplay
         [PublicAPI]
         public static void ShowItem(string name, string source, ISprite sprite)
         {
-            ItemDisplayArgs args = new ItemDisplayArgs(name, source, sprite);
+            ItemDisplayArgs args = new(name, source, sprite);
             ShowItem(args);
         }
 
@@ -120,12 +120,17 @@ namespace RecentItemsDisplay
         // and the types of the input parameters (if necessary)
         #endregion
 
-        public static void ShowItemInternal(ISprite sprite, string text)
+        /// <summary>
+        /// Send an item directly to the display.
+        /// </summary>
+        /// <param name="spriteHolder">A UIDef whose GetSprite method returns the sprite to display.</param>
+        /// <param name="text">The text to show.</param>
+        public static void ShowItemInternal(UIDef spriteHolder, string text)
         {
             Sprite spriteValue;
             try
             {
-                spriteValue = sprite.Value;
+                spriteValue = spriteHolder.GetSprite();
             }
             catch (Exception ex)
             {

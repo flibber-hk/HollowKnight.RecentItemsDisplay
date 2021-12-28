@@ -18,7 +18,7 @@ namespace RecentItemsDisplay
 
         public static void Reset()
         {
-            RecentItems.globalSettings.AnchorPoint = GlobalSettings.DefaultAnchor;
+            RecentItems.GS.AnchorPoint = GlobalSettings.DefaultAnchor;
             Display.Redraw();
         }
 
@@ -26,7 +26,7 @@ namespace RecentItemsDisplay
         {
             void Move()
             {
-                RecentItems.globalSettings.AnchorPoint += new Vector2(x,y);
+                RecentItems.GS.AnchorPoint += new Vector2(x,y);
                 Display.Redraw();
             }
             return Move;
@@ -34,7 +34,7 @@ namespace RecentItemsDisplay
 
         private static void ToggleDisplay()
         {
-            RecentItems.globalSettings.ShowDisplay = !RecentItems.globalSettings.ShowDisplay;
+            RecentItems.GS.ShowDisplay = !RecentItems.GS.ShowDisplay;
             RecentItems.instance.RefreshMenu();
             DebugMod.LogToConsole("Toggled Display");
         }

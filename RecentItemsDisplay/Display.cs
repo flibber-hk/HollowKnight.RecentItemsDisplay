@@ -9,7 +9,7 @@ namespace RecentItemsDisplay
     {
         public const int MaxDisplayableItems = 10;
 
-        private static Queue<GameObject> items = new();
+        private static readonly Queue<GameObject> items = new();
 
         private static GameObject canvas;
         public static void Create()
@@ -26,8 +26,8 @@ namespace RecentItemsDisplay
 
             CanvasUtil.CreateTextPanel(canvas, "Recent Items", 24, TextAnchor.MiddleCenter,
                 new CanvasUtil.RectData(new Vector2(200, 100), Vector2.zero,
-                RecentItems.globalSettings.AnchorPoint + new Vector2(-0.025f, 0.05f), 
-                RecentItems.globalSettings.AnchorPoint + new Vector2(-0.025f, 0.05f)));
+                RecentItems.GS.AnchorPoint + new Vector2(-0.025f, 0.05f), 
+                RecentItems.GS.AnchorPoint + new Vector2(-0.025f, 0.05f)));
 
             if (invPanels <= 0) Show();
         }
@@ -46,7 +46,7 @@ namespace RecentItemsDisplay
         {
             Destroy();
             Create();
-            RecentItems.saveData.SendAll();
+            RecentItems.SD.SendAll();
         }
 
         internal static void AddItem(Sprite sprite, string msg)
@@ -58,7 +58,7 @@ namespace RecentItemsDisplay
 
             GameObject basePanel = CanvasUtil.CreateBasePanel(canvas,
                 new CanvasUtil.RectData(new Vector2(200, 50), Vector2.zero,
-                RecentItems.globalSettings.AnchorPoint, RecentItems.globalSettings.AnchorPoint));
+                RecentItems.GS.AnchorPoint, RecentItems.GS.AnchorPoint));
 
             if (sprite != null)
             {
@@ -85,17 +85,17 @@ namespace RecentItemsDisplay
             int i = items.Count - 1;
             foreach (GameObject item in items)
             {
-                Vector2 newPos = RecentItems.globalSettings.AnchorPoint + new Vector2(0, - 0.06f * i--);
+                Vector2 newPos = RecentItems.GS.AnchorPoint + new Vector2(0, - 0.06f * i--);
                 item.GetComponent<RectTransform>().anchorMin = newPos;
                 item.GetComponent<RectTransform>().anchorMax = newPos;
-                item.SetActive(i < RecentItems.globalSettings.MaxItems - 1);
+                item.SetActive(i < RecentItems.GS.MaxItems - 1);
             }
         }
 
         public static void Show()
         {
             if (canvas == null) return;
-            canvas.SetActive(RecentItems.globalSettings.ShowDisplay);
+            canvas.SetActive(RecentItems.GS.ShowDisplay);
         }
 
         public static void Hide()
@@ -135,7 +135,7 @@ namespace RecentItemsDisplay
             orig(self);
             if (!SentItemsFromSave)
             {
-                RecentItems.saveData.SendAll();
+                RecentItems.SD.SendAll();
                 SentItemsFromSave = true;
             }
         }
