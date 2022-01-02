@@ -13,5 +13,6 @@ namespace RecentItemsDisplay
         public int MaxItems = 5;
         public bool ShowRefreshedItems = false;
         public Vector2 AnchorPoint = DefaultAnchor;
+        public bool HideDisplayWhilePaused = true;
     }
 }

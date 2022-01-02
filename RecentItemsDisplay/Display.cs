@@ -151,7 +151,7 @@ namespace RecentItemsDisplay
         {
             orig(self);
             invPanels++;
-            Hide();
+            if (RecentItems.GS.HideDisplayWhilePaused) Hide();
         }
 
         private static void OnInventoryClose(On.InvAnimateUpAndDown.orig_AnimateDown orig, InvAnimateUpAndDown self)
@@ -177,7 +177,7 @@ namespace RecentItemsDisplay
                 RecentItems.instance.LogWarn("invPanels not equal to 0 on pause");
                 invPanels = 0;
             }
-            Hide();
+            if (RecentItems.GS.HideDisplayWhilePaused) Hide();
             orig(self);
         }
 

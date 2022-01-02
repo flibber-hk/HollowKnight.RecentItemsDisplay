@@ -57,6 +57,15 @@ namespace RecentItemsDisplay
 
             entries.Add(new IMenuMod.MenuEntry()
             {
+                Name = "Hide Display While Paused",
+                Description = string.Empty,
+                Values = new string[] { "True", "False" },
+                Saver = opt => GS.HideDisplayWhilePaused = opt == 0,
+                Loader = () => GS.HideDisplayWhilePaused ? 0 : 1
+            });
+
+            entries.Add(new IMenuMod.MenuEntry()
+            {
                 Name = "Show Refreshed Items",
                 Description = "Toggle whether to send items to the display when it's not your first time picking them up",
                 Values = new string[] { "True", "False" },
