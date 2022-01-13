@@ -29,7 +29,7 @@ namespace RecentItemsDisplay
                 RecentItems.GS.AnchorPoint + new Vector2(-0.025f, 0.05f), 
                 RecentItems.GS.AnchorPoint + new Vector2(-0.025f, 0.05f)));
 
-            if (invPanels <= 0) Show();
+            if (invPanels <= 0 || !RecentItems.GS.HideDisplayWhilePaused) Show();
         }
 
         public static void Destroy()
@@ -38,8 +38,6 @@ namespace RecentItemsDisplay
             canvas = null;
 
             items.Clear();
-
-            invPanels = 0;
         }
 
         public static void Redraw()
