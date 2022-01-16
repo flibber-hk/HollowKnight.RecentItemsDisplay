@@ -23,7 +23,14 @@ namespace RecentItemsDisplay
         public static GlobalSettings GS { get; set; } = new GlobalSettings();
         public void OnLoadGlobal(GlobalSettings s)
         {
-            s.MaxItems = Mathf.Clamp(s.MaxItems, 1, Display.MaxDisplayableItems);
+            if (s.MaxItems <= 0)
+            {
+                s.MaxItems = 1;
+            }
+            else if (s.MaxItems > Display.MaxDisplayableItems)
+            {
+                Display.MaxDisplayableItems = s.MaxItems;
+            }
             GS = s;
         }
         public GlobalSettings OnSaveGlobal() => GS;

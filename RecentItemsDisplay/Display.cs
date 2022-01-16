@@ -7,7 +7,7 @@ namespace RecentItemsDisplay
 {
     internal static class Display
     {
-        public const int MaxDisplayableItems = 10;
+        public static int MaxDisplayableItems { get; internal set; } = 10;
 
         private static readonly Queue<GameObject> items = new();
 
