@@ -49,6 +49,7 @@ namespace RecentItemsDisplay
                 case SceneNames.RestingGrounds_07: return "Seer";
                 case SceneNames.Room_Ouiji: return "Jiji";
                 case SceneNames.Room_Jinn: return "Jinn";
+                case SceneNames.Grimm_Divine: return "Divine";
                 // Forward compatibility
                 case SceneNames.Room_nailsmith: return "Nailsmith";
                 case SceneNames.Room_Mask_Maker: return "Mask Maker";
