@@ -115,6 +115,8 @@ namespace RecentItemsDisplay
             On.InvAnimateUpAndDown.AnimateDown += OnInventoryClose;
             On.UIManager.UIGoToPauseMenu += OnPause;
             On.UIManager.UIClosePauseMenu += OnUnpause;
+            On.GameMap.SetupMapMarkers += OnShowMap;
+            On.GameMap.DisableMarkers += OnHideMap;
         }
 
         internal static void UnHook()
@@ -125,6 +127,32 @@ namespace RecentItemsDisplay
             On.InvAnimateUpAndDown.AnimateDown -= OnInventoryClose;
             On.UIManager.UIGoToPauseMenu -= OnPause;
             On.UIManager.UIClosePauseMenu -= OnUnpause;
+            On.GameMap.SetupMapMarkers -= OnShowMap;
+            On.GameMap.DisableMarkers -= OnHideMap;
+        }
+
+        private static void TryShow()
+        {
+            if (invPanels <= 0)
+            {
+                if (invPanels < 0)
+                {
+                    invPanels = 0;
+                    RecentItems.instance.LogWarn("invPanels less than 0");
+                }
+                Show();
+            }
+        }
+
+        private static void OnShowMap(On.GameMap.orig_SetupMapMarkers orig, GameMap self)
+        {
+            orig(self);
+            Hide();
+        }
+        private static void OnHideMap(On.GameMap.orig_DisableMarkers orig, GameMap self)
+        {
+            orig(self);
+            TryShow();
         }
 
         private static bool SentItemsFromSave = false;
@@ -156,15 +184,7 @@ namespace RecentItemsDisplay
         {
             orig(self);
             invPanels--;
-            if (invPanels <= 0)
-            {
-                if (invPanels < 0)
-                {
-                    invPanels = 0;
-                    RecentItems.instance.LogWarn("invPanels less than 0");
-                }
-                Show();
-            }
+            TryShow();
         }
 
         private static void OnPause(On.UIManager.orig_UIGoToPauseMenu orig, UIManager self)
@@ -182,7 +202,7 @@ namespace RecentItemsDisplay
         private static void OnUnpause(On.UIManager.orig_UIClosePauseMenu orig, UIManager self)
         {
             orig(self);
-            Show();
+            TryShow();
             UpdatePositions();
         }
     }
