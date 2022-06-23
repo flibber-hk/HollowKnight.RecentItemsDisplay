@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# LocalBuildProperties file
+LocalBuildProperties.props
+
 # Output zip
 RecentItemsDisplay.zip
 
