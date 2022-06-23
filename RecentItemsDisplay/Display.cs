@@ -138,7 +138,7 @@ namespace RecentItemsDisplay
                 if (invPanels < 0)
                 {
                     invPanels = 0;
-                    RecentItems.instance.LogWarn("invPanels less than 0");
+                    RecentItems.instance.LogDebug("invPanels less than 0");
                 }
                 Show();
             }
@@ -196,7 +196,7 @@ namespace RecentItemsDisplay
             // Failsafe
             if (invPanels != 0)
             {
-                RecentItems.instance.LogWarn("invPanels not equal to 0 on pause");
+                RecentItems.instance.LogDebug("invPanels not equal to 0 on pause");
                 invPanels = 0;
             }
             if (RecentItems.GS.HideDisplayWhilePaused) Hide();
