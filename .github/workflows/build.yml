@@ -1,0 +1,83 @@
+name: Build
+
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      should_release:
+        description: "Create release?"
+        required: true
+        default: false
+        type: boolean
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup MAPI
+        uses: BadMagic100/setup-hk@v1
+        with:
+          apiPath: API
+          dependencyFilePath: ModDependencies.txt
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+      
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build -c Release
+
+      - name: Prepare artifacts for release
+        uses: actions/upload-artifact@v2
+        with:
+          name: RecentItemsDisplay
+          path: RecentItemsDisplay/bin/Publish/RecentItemsDisplay/zip
+      - name: Upload metadata
+        uses: actions/upload-artifact@v2
+        with:
+          name: metadata
+          path: RecentItemsDisplay/bin/Publish/RecentItemsDisplay/metadata
+
+  release:
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    # only make a release if we manually request the build - other builds will be handled automatically with a push
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.should_release == 'true'
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: artifacts
+      - name: Zip
+        run: |
+            zip -jr RecentItemsDisplay.zip ./artifacts/RecentItemsDisplay/*
+      - name: Generate release info
+        run: |
+            echo -n "Sha256: " > ChangeLog.txt ;
+            sha256sum -b RecentItemsDisplay.zip | cut -d " " -f 1 >> ChangeLog.txt ;
+      - name: Get build version
+        id: details
+        run: |
+          sed '1s/^\xEF\xBB\xBF//' < artifacts/metadata/version.txt > version.txt
+          echo "::set-output name=buildVersion::$(cat version.txt)"
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: false
+          generate_release_notes: false
+          fail_on_unmatched_files: true
+          tag_name: v${{ steps.details.outputs.buildVersion }}
+          body_path: ChangeLog.txt
+          files: |
+            RecentItemsDisplay.zip
