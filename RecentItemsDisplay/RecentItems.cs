@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using ItemChanger;
+using ItemChanger.Internal;
 using Modding;
 using MonoMod.ModInterop;
 using UnityEngine;
@@ -42,6 +43,8 @@ namespace RecentItemsDisplay
         #region Menu
         public List<IMenuMod.MenuEntry> GetMenuData(IMenuMod.MenuEntry? toggleButtonEntry)
         {
+            string[] bools = new string[] { LanguageStringManager.GetICString("FALSE"), LanguageStringManager.GetICString("TRUE") };
+
             List<IMenuMod.MenuEntry> entries = new();
 
             entries.Add(new IMenuMod.MenuEntry()
@@ -74,7 +77,7 @@ namespace RecentItemsDisplay
             entries.Add(new IMenuMod.MenuEntry()
             {
                 Name = "Show Refreshed Items",
-                Description = "Toggle whether to send items to the display when it's not your first time picking them up",
+                Description = "Toggle whether to send refreshed items to the display",
                 Values = new string[] { "True", "False" },
                 Saver = opt => GS.ShowRefreshedItems = opt == 0,
                 Loader = () => GS.ShowRefreshedItems ? 0 : 1
@@ -93,12 +96,12 @@ namespace RecentItemsDisplay
 
             Display.Hook();
             AreaName.LoadData();
+            LanguageText.Hook();
 
             AbstractItem.AfterGiveGlobal += SendItemToDisplay;
 
             ManualConfig.Setup();
         }
-
 
         private void SendItemToDisplay(ReadOnlyGiveEventArgs obj)
         {

@@ -44,7 +44,7 @@ namespace RecentItemsDisplay
                 }
                 else
                 {
-                    DisplaySource = AreaName.CleanAreaName(locpmt.Location.sceneName);
+                    DisplaySource = AreaName.LocalizedCleanAreaName(locpmt.Location.sceneName);
                 }
             }
             SpriteSource = args.Item.UIDef;
@@ -81,14 +81,18 @@ namespace RecentItemsDisplay
         /// <returns></returns>
         public string GetMessage()
         {
-            if (string.IsNullOrEmpty(DisplayMessage))
-            {
-                return string.IsNullOrEmpty(DisplaySource) ? DisplayName : DisplayName + "\nfrom " + DisplaySource;
-            }
-            else
+            return GetUnformattedMessage().Replace("<br>", "\n");
+        }
+
+        private string GetUnformattedMessage()
+        {
+            if (!string.IsNullOrEmpty(DisplayMessage))
             {
                 return DisplayMessage;
             }
+            return string.IsNullOrEmpty(DisplaySource)
+                ? DisplayName
+                : string.Format(Language.Language.Get("DEFAULT_MESSAGE_FORMAT", "RecentItems"), DisplayName, DisplaySource);
         }
         /// <summary>
         /// The ReadOnlyGiveEventArgs associated with the message. This will be null if the message was not sent by ItemChanger.

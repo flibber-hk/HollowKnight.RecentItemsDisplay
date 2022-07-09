@@ -6,6 +6,10 @@ namespace RecentItemsDisplay
     public static class ManualConfig
     {
         public const string CATEGORY = "Recent Items Config";
+
+        /// <summary>
+        /// Set up the debug keybinds
+        /// </summary>
         public static void Setup()
         {
             DebugMod.AddActionToKeyBindList(Reset, "Default Position", CATEGORY);
