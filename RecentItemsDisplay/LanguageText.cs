@@ -30,7 +30,7 @@ namespace RecentItemsDisplay
 
         private static readonly Dictionary<LanguageKey, string> RecentItemsLanguage = new()
         {
-            [new("RecentItems", "GRUBFATHER")] = "Grubfather",
+            [new("RecentItems", "GRUBFATHER_MAIN")] = "Grubfather",
             [new("RecentItems", "DEFAULT_MESSAGE_FORMAT")] = "{0}<br>from {1}",
 
         };
