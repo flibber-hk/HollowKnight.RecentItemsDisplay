@@ -161,8 +161,14 @@ namespace RecentItemsDisplay
             orig(self);
             if (!SentItemsFromSave)
             {
-                RecentItems.SD.SendAll();
+                self.StartCoroutine(SendItemsAfterFrame());
                 SentItemsFromSave = true;
+            }
+
+            IEnumerator SendItemsAfterFrame()
+            {
+                yield return null;
+                RecentItems.SD.SendAll();
             }
         }
 
