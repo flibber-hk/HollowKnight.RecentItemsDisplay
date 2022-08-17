@@ -4,7 +4,7 @@
     <TargetFramework>net472</TargetFramework>
     <RootNamespace>RecentItemsDisplay</RootNamespace>
     <AssemblyTitle>RecentItemsDisplay</AssemblyTitle>
-    <AssemblyVersion>1.2.1.1</AssemblyVersion>
+    <AssemblyVersion>1.2.1.2</AssemblyVersion>
     <Deterministic>true</Deterministic>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <LangVersion>latest</LangVersion>
