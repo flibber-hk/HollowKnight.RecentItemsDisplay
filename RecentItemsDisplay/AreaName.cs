@@ -53,8 +53,8 @@ namespace RecentItemsDisplay
                 // Forward compatibility
                 case SceneNames.Room_nailsmith: return "Nailsmith";
                 case SceneNames.Room_Mask_Maker: return "Mask Maker";
-                case SceneNames.Room_Tram: return "Upper Tram";
-                case SceneNames.Room_Tram_RG: return "Lower Tram";
+                case SceneNames.Room_Tram: return "Lower Tram";
+                case SceneNames.Room_Tram_RG: return "Upper Tram";
 
                 default:
                     if (sceneToArea.TryGetValue(scene, out string area))
