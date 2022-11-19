@@ -175,18 +175,20 @@ namespace RecentItemsDisplay
 
         private static void OnInventoryOpen(On.InvAnimateUpAndDown.orig_AnimateUp orig, InvAnimateUpAndDown self)
         {
+            orig(self);
+
             if (self.gameObject.name.StartsWith("Nightmare Crowdling")) return;
 
-            orig(self);
             invPanels++;
             if (RecentItems.GS.HideDisplayWhilePaused) Hide();
         }
 
         private static void OnInventoryClose(On.InvAnimateUpAndDown.orig_AnimateDown orig, InvAnimateUpAndDown self)
         {
+            orig(self);
+
             if (self.gameObject.name.StartsWith("Nightmare Crowdling")) return;
 
-            orig(self);
             invPanels--;
             TryShow();
         }
