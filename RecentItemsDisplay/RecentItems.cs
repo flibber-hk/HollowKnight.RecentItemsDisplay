@@ -83,6 +83,15 @@ namespace RecentItemsDisplay
                 Loader = () => GS.ShowRefreshedItems ? 0 : 1
             });
 
+            entries.Add(new IMenuMod.MenuEntry()
+            {
+                Name = "Item send delay",
+                Description = "Toggle whether there should be a delay before showing an item",
+                Values = new string[] { "True", "False" },
+                Saver = opt => GS.ItemSendDelay = opt == 0,
+                Loader = () => GS.ItemSendDelay ? 0 : 1
+            });
+
             // Shorten the description of Show Refreshed Items before adding to the menu
 
             return entries;
@@ -105,7 +114,16 @@ namespace RecentItemsDisplay
 
         private void SendItemToDisplay(ReadOnlyGiveEventArgs obj)
         {
-            ItemDisplayMethods.ShowItem(new ItemDisplayArgs(obj));
+            void toInvoke() => ItemDisplayMethods.ShowItem(new ItemDisplayArgs(obj));
+
+            if (GS.ItemSendDelay)
+            {
+                CoroutineHelper.InvokeAfterDelay(toInvoke, GS.ItemSendDelayDuration);
+            }
+            else
+            {
+                toInvoke();
+            }
         }
 
 

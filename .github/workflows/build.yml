@@ -1,5 +1,8 @@
 name: Build
 
+permissions:
+  contents: write
+
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
@@ -70,7 +73,7 @@ jobs:
         id: details
         run: |
           sed '1s/^\xEF\xBB\xBF//' < artifacts/metadata/version.txt > version.txt
-          echo "::set-output name=buildVersion::$(cat version.txt)"
+          echo "buildVersion=$(cat version.txt)" >> $GITHUB_OUTPUT
       - name: Release
         uses: softprops/action-gh-release@v1
         with:

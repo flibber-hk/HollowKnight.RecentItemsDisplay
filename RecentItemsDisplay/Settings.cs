@@ -14,5 +14,8 @@ namespace RecentItemsDisplay
         public bool ShowRefreshedItems = false;
         public Vector2 AnchorPoint = DefaultAnchor;
         public bool HideDisplayWhilePaused = true;
+
+        public bool ItemSendDelay = false;
+        public float ItemSendDelayDuration = 2f;
     }
 }
