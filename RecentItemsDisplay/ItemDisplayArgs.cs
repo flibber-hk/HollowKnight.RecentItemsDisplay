@@ -55,15 +55,7 @@ namespace RecentItemsDisplay
                 IgnoreItem = true;
             }
 
-            foreach (ItemChanger.Tags.IInteropTag tag in args.Orig.GetTags<ItemChanger.Tags.IInteropTag>())
-            {
-                if (tag.Message != nameof(RecentItems)) continue;
-
-                if (tag.TryGetProperty(nameof(DisplayName), out string DisplayNameOverride)) this.DisplayName = DisplayNameOverride;
-                if (tag.TryGetProperty(nameof(DisplayMessage), out string DisplayMessageOverride)) this.DisplayMessage = DisplayMessageOverride;
-                if (tag.TryGetProperty(nameof(SpriteSource), out UIDef SpriteSourceOverride)) this.SpriteSource = SpriteSourceOverride;
-                if (tag.TryGetProperty(nameof(IgnoreItem), out bool IgnoreItemOverride)) this.IgnoreItem = IgnoreItemOverride;
-            }
+            // Check the placement/location before items, as we can assume that if there's a clash the item tag should take priority
             foreach (ItemChanger.Tags.IInteropTag tag in args.Placement.GetPlacementAndLocationTags().OfType<ItemChanger.Tags.IInteropTag>())
             {
                 if (tag.Message != nameof(RecentItems)) continue;
@@ -72,6 +64,17 @@ namespace RecentItemsDisplay
                 if (tag.TryGetProperty(nameof(DisplayMessage), out string DisplayMessageOverride)) this.DisplayMessage = DisplayMessageOverride;
                 if (tag.TryGetProperty(nameof(IgnoreItem), out bool IgnoreItemOverride)) this.IgnoreItem = IgnoreItemOverride;
             }
+            foreach (ItemChanger.Tags.IInteropTag tag in args.Orig.GetTags<ItemChanger.Tags.IInteropTag>())
+            {
+                if (tag.Message != nameof(RecentItems)) continue;
+
+                if (tag.TryGetProperty(nameof(DisplayName), out string DisplayNameOverride)) this.DisplayName = DisplayNameOverride;
+                if (tag.TryGetProperty(nameof(DisplaySource), out string DisplaySourceOverride)) this.DisplaySource = DisplaySourceOverride;
+                if (tag.TryGetProperty(nameof(DisplayMessage), out string DisplayMessageOverride)) this.DisplayMessage = DisplayMessageOverride;
+                if (tag.TryGetProperty(nameof(SpriteSource), out UIDef SpriteSourceOverride)) this.SpriteSource = SpriteSourceOverride;
+                if (tag.TryGetProperty(nameof(IgnoreItem), out bool IgnoreItemOverride)) this.IgnoreItem = IgnoreItemOverride;
+            }
+
         }
 
         /// <summary>
