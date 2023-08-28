@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ItemChanger;
+using ItemChanger.Tags;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -56,7 +57,7 @@ namespace RecentItemsDisplay
             }
 
             // Check the placement/location before items, as we can assume that if there's a clash the item tag should take priority
-            foreach (ItemChanger.Tags.IInteropTag tag in args.Placement.GetPlacementAndLocationTags().OfType<ItemChanger.Tags.IInteropTag>())
+            foreach (IInteropTag tag in args.Placement?.GetPlacementAndLocationTags().OfType<IInteropTag>() ?? Enumerable.Empty<IInteropTag>())
             {
                 if (tag.Message != nameof(RecentItems)) continue;
 
@@ -64,7 +65,7 @@ namespace RecentItemsDisplay
                 if (tag.TryGetProperty(nameof(DisplayMessage), out string DisplayMessageOverride)) this.DisplayMessage = DisplayMessageOverride;
                 if (tag.TryGetProperty(nameof(IgnoreItem), out bool IgnoreItemOverride)) this.IgnoreItem = IgnoreItemOverride;
             }
-            foreach (ItemChanger.Tags.IInteropTag tag in args.Orig.GetTags<ItemChanger.Tags.IInteropTag>())
+            foreach (IInteropTag tag in args.Orig?.GetTags<IInteropTag>() ?? Enumerable.Empty<IInteropTag>())
             {
                 if (tag.Message != nameof(RecentItems)) continue;
 
