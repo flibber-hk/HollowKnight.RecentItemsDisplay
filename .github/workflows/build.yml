@@ -41,12 +41,12 @@ jobs:
         run: dotnet build -c Release
 
       - name: Prepare artifacts for release
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: RecentItemsDisplay
           path: RecentItemsDisplay/bin/Publish/RecentItemsDisplay/zip
       - name: Upload metadata
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: metadata
           path: RecentItemsDisplay/bin/Publish/RecentItemsDisplay/metadata
